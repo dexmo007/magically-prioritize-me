@@ -1,7 +1,20 @@
 {
   "name": "magically-prioritize-me",
+  "description": "Apply Magic Prioritization to rank issues for your sprint",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Henrik Drefs",
+    "url": "https://github.com/dexmo007"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dexmo007/magically-prioritize-me.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dexmo007/magically-prioritize-me/issues"
+  },
   "dependencies": {
     "@atlaskit/avatar": "^17.1.5",
     "@atlaskit/button": "^13.3.5",
