@@ -1,0 +1,70 @@
+.IssueCard {
+  display: flex;
+  flex-direction: column;
+  /* width: 500px; */
+  background-color: white;
+  border: 2px solid #d3d3d3;
+  border-radius: 5px;
+  padding: 1em;
+  cursor: grab;
+}
+
+.IssueCard .icon {
+  height: 1em;
+  margin: 0 0.1em;
+}
+
+.IssueCard .header {
+  padding: 0.5em 0;
+  display: flex;
+}
+.IssueCard.compact .header {
+  padding: 0;
+}
+
+.IssueCard .title {
+  padding: 0.5em 0;
+  font-weight: bold;
+}
+
+.IssueCard .content {
+  padding: 1em 0;
+}
+
+.IssueCard .footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.IssueCard .epic {
+  border-radius: 0.2em;
+  padding: 0.15em;
+  text-decoration: none;
+  flex-grow: 0;
+}
+.IssueCard .epic:hover {
+  text-decoration: underline;
+  color: #fff;
+}
+
+.IssueCard .badge {
+  display: inline-block;
+  background-color: #d3d3d3;
+  margin-left: auto;
+  border-radius: 50%;
+  width: 1.5em;
+  height: 1.5em;
+  position: relative;
+}
+.IssueCard .badge.touched {
+  background-color: #ffd022;
+}
+
+.IssueCard .badge::before {
+  content: attr(data-value);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

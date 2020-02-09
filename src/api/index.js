@@ -1,9 +1,14 @@
+const proxyUrl =
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:34567/jira-proxy'
+    : '??';
+
 async function proxyFetch({ serverUrl, method, uri, body, session }) {
   const headers = body ? { 'Content-Type': 'application/json' } : {};
   if (session) {
     headers['X-JIRA-Cookie'] = `${session.name}=${session.value}`;
   }
-  const res = await fetch(`http://localhost:8080${uri}`, {
+  const res = await fetch(`${proxyUrl}${uri}`, {
     method: method || 'GET',
     headers: {
       ...headers,
@@ -18,7 +23,7 @@ async function proxyFetch({ serverUrl, method, uri, body, session }) {
   return await res.json();
 }
 
-export async function serverInfo(serverUrl) {
+export async function getServerInfo(serverUrl) {
   return proxyFetch({ serverUrl, uri: '/rest/api/2/serverInfo' });
 }
 
@@ -50,12 +55,35 @@ export async function searchBoards({ serverUrl, session, q }) {
   });
 }
 
-export async function getSprints({ serverUrl, session, includeClosed }) {
+export async function getSprints({
+  serverUrl,
+  session,
+  boardId,
+  includeClosed,
+}) {
   return proxyFetch({
     serverUrl,
     session,
-    uri: `/rest/agile/1.0/board/2800/sprint${
+    uri: `/rest/agile/1.0/board/${boardId}/sprint${
       includeClosed ? '' : '?state=active,future'
     }`,
   });
+}
+
+export async function getBoardConfig({ serverUrl, session, boardId }) {
+  return proxyFetch({
+    serverUrl,
+    session,
+    uri: `/rest/agile/1.0/board/${boardId}/configuration`,
+  });
+}
+
+export async function getIssuesInSprint({ serverUrl, session, sprintId }) {
+  // TODO follow pagination!
+  const res = await proxyFetch({
+    serverUrl,
+    session,
+    uri: `/rest/agile/1.0/sprint/${sprintId}/issue?expand=names,renderedFields`,
+  });
+  return res.issues;
 }

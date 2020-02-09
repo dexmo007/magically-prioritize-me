@@ -1,21 +1,8 @@
 import React from 'react';
 import { DynamicTableStateless } from '@atlaskit/dynamic-table';
-import Avatar from '@atlaskit/avatar';
-import TextField from '@atlaskit/textfield';
 import AppContext from '../../AppContext';
-import { getProjects, getSprints } from '../../api';
+import { getSprints } from '../../api';
 import { Button } from '@atlaskit/button/dist/cjs/components/Button';
-
-function AvatarLink({ src, href, children }) {
-  return (
-    <div style={{ display: 'flex', alignItems: 'center' }}>
-      <div style={{ marginRight: '8px' }}>
-        <Avatar src={src}></Avatar>
-      </div>
-      <a href={href}>{children}</a>
-    </div>
-  );
-}
 
 class SelectSprintStep extends React.Component {
   static contextType = AppContext;
@@ -29,6 +16,7 @@ class SelectSprintStep extends React.Component {
     try {
       const res = await getSprints({
         ...this.context.data,
+        boardId: this.context.data.board.id,
         includeClosed: this.state.includeClosed,
       });
       this.setState({ sprints: res.values });
@@ -89,8 +77,8 @@ class SelectSprintStep extends React.Component {
                   key: sprint.id + '-goal',
                   content: (
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
-                      {sprint.goal.split('\n').map((line) => (
-                        <span>{line}</span>
+                      {sprint.goal.split('\n').map((line, i) => (
+                        <span key={i}>{line}</span>
                       ))}
                     </div>
                   ),
