@@ -65,7 +65,9 @@ exports.handler = async (event, context) => {
     const jiraResponse = await fetch(
       encodeURI(
         serverUrl +
-          event.path.replace(/\/jira-proxy/, '') +
+          event.path
+            .replace(/^\/\.netlify\/functions/, '')
+            .replace(/^\/jira-proxy/, '') +
           stringifyQueryParams(event.queryStringParameters)
       ),
       options
