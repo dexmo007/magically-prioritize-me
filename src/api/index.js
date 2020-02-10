@@ -1,7 +1,4 @@
-const proxyUrl =
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:34567/jira-proxy'
-    : '??';
+const proxyUrl = '/.netlify/functions/jira-proxy';
 
 async function proxyFetch({ serverUrl, method, uri, body, session }) {
   const headers = body ? { 'Content-Type': 'application/json' } : {};
