@@ -180,7 +180,9 @@ class App extends React.Component {
         <ProgressTracker items={this.state.stages} />
         <Grid>
           <GridColumn>
-            <Step onFinish={this.advance}></Step>
+            <div style={{ marginTop: '2em' }}>
+              <Step onFinish={this.advance}></Step>
+            </div>
           </GridColumn>
         </Grid>
       </React.Fragment>

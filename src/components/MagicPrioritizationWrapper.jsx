@@ -71,7 +71,7 @@ class MagicPrioritizationWrapper extends React.Component {
       issues = arrayShuffle(transformedIssues);
       const { teamMembers } = this.context.data.config;
       const players = arrayChunk(issues, teamMembers.length).map((pile, i) => ({
-        name: teamMembers[i],
+        user: teamMembers[i],
         pile,
       }));
       localStorage.setItem('players', JSON.stringify(players));

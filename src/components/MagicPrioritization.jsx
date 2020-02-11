@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import { Button } from '@atlaskit/button/dist/cjs/components/Button';
 import TimeRange from './TimeRange';
 import { sortByDebatabilty } from '../util/issue-sort';
+import AvatarGroup from '@atlaskit/avatar-group';
 
 const TimerWrapper = styled.div`
   position: absolute;
@@ -146,19 +147,20 @@ class MagicPrioritization extends React.Component {
         )}
         <div>
           <div>
-            <ul>
-              {this.state.players.map((player, i) => (
-                <li
-                  key={i}
-                  style={{
-                    border:
-                      this.state.activePlayer === i ? '1px solid red' : null,
-                  }}
-                >
-                  {player.name}
-                </li>
-              ))}
-            </ul>
+            <AvatarGroup
+              appearance="stack"
+              size="large"
+              data={[
+                ...this.state.players.slice(this.state.activePlayer),
+                ...this.state.players.slice(0, this.state.activePlayer),
+              ].map(({ user }) => ({
+                key: user.key,
+                name: user.displayName,
+                src: user.avatarUrls && user.avatarUrls['32x32'],
+                appearance: 'circle',
+                size: 'medium',
+              }))}
+            />
           </div>
           <ReactSortable
             list={this.state.players[this.state.activePlayer].pile}
@@ -247,7 +249,11 @@ class MagicPrioritization extends React.Component {
 MagicPrioritization.propTypes = {
   players: PropTypes.arrayOf(
     PropTypes.shape({
-      name: PropTypes.string.isRequired,
+      user: PropTypes.shape({
+        key: PropTypes.string.isRequired,
+        displayName: PropTypes.string.isRequired,
+        avatarUrls: PropTypes.object,
+      }).isRequired,
       pile: PropTypes.arrayOf(PropTypes.object).isRequired,
     })
   ).isRequired,

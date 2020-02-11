@@ -67,6 +67,28 @@ export async function getSprints({
   });
 }
 
+export async function findUsersAssignableToProject({
+  serverUrl,
+  session,
+  projectKey,
+}) {
+  return proxyFetch({
+    serverUrl,
+    session,
+    uri: `/rest/api/2/user/assignable/multiProjectSearch?projectKeys=${projectKey}`,
+  });
+}
+
+export async function searchUsers({ serverUrl, session, query, maxResults }) {
+  return proxyFetch({
+    serverUrl,
+    session,
+    uri: `/rest/api/2/user/search?username=${query}${
+      maxResults ? '&maxResults=' + maxResults : ''
+    }`,
+  });
+}
+
 export async function getBoardConfig({ serverUrl, session, boardId }) {
   return proxyFetch({
     serverUrl,
