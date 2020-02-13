@@ -15,6 +15,16 @@ class Timer extends React.Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.seconds !== this.props.seconds) {
+      this.stop();
+      this.setState({ seconds: this.props.seconds });
+      if (this.props.autoStart) {
+        this.start();
+      }
+    }
+  }
+
   start = () => {
     this.interval = setInterval(() => {
       this.setState(
@@ -44,7 +54,7 @@ class Timer extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className={this.props.className} style={this.props.style}>
         {String(Math.floor(this.state.seconds / 60)).padStart(2, '0')}:
         {String(this.state.seconds % 60).padStart(2, '0')}
       </div>

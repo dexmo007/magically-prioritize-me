@@ -4,9 +4,9 @@ import classNames from 'classnames';
 import './IssueCard.css';
 import AppContext from '../AppContext';
 
-function CompactIssueCard(ctx, value) {
+function CompactIssueCard({ ctx, value, className }) {
   return (
-    <div className="IssueCard compact">
+    <div className={classNames('IssueCard compact', className)}>
       <div className="header">
         <a
           href={`${ctx.data.serverUrl}/browse/${value.key}`}
@@ -65,13 +65,13 @@ function CompactIssueCard(ctx, value) {
   );
 }
 
-function IssueCard({ value, compact }) {
+function IssueCard({ value, compact, className }) {
   const ctx = useContext(AppContext);
   if (compact) {
-    return CompactIssueCard(ctx, value);
+    return <CompactIssueCard value={value} className={className} ctx={ctx} />;
   }
   return (
-    <div className="IssueCard">
+    <div className={classNames('IssueCard', className)}>
       <div className="header">
         <img
           className="icon"

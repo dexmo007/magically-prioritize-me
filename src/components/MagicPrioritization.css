@@ -1,0 +1,10 @@
+.draggable {
+  cursor: grab;
+  user-select: none;
+}
+.draggable.disabled {
+  cursor: inherit;
+}
+.no-select {
+  user-select: none;
+}

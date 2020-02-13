@@ -9,12 +9,7 @@ import { Button } from '@atlaskit/button/dist/cjs/components/Button';
 import TimeRange from './TimeRange';
 import { sortByDebatabilty } from '../util/issue-sort';
 import AvatarGroup from '@atlaskit/avatar-group';
-
-const TimerWrapper = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-`;
+import './MagicPrioritization.css';
 
 const CenteredRow = styled.div`
   display: flex;
@@ -49,6 +44,27 @@ function TimerEndedFooter({ onFinish, onExtendTimer }) {
   );
 }
 
+function Players({ players, activePlayer }) {
+  return (
+    <div>
+      <AvatarGroup
+        appearance="stack"
+        size="large"
+        data={[
+          ...players.slice(activePlayer),
+          ...players.slice(0, activePlayer),
+        ].map(({ user }) => ({
+          key: user.key,
+          name: user.displayName,
+          src: user.avatarUrls && user.avatarUrls['32x32'],
+          appearance: 'circle',
+          size: 'medium',
+        }))}
+      />
+    </div>
+  );
+}
+
 class MagicPrioritization extends React.Component {
   constructor(props) {
     super(props);
@@ -57,8 +73,11 @@ class MagicPrioritization extends React.Component {
       prioritizedIssues: [],
       activePlayer: 0,
       phase: 'FIRST',
-      timerDuration: 10, //props.reArrangeDuration * 60,
+      timerDuration: props.reArrangeDuration * 60,
     };
+    this.id = String(Math.random());
+    this.sourceSortableId = `source-sortable-${this.id}`;
+    this.targetSortableId = `target-sortable-${this.id}`;
   }
 
   setPile = (i, pile) => {
@@ -88,103 +107,77 @@ class MagicPrioritization extends React.Component {
   };
 
   startReArranging = () => {
-    this.setState({
-      phase: 'REARRANGING',
-    });
+    this.setState(
+      {
+        phase: 'REARRANGING',
+      },
+      () => {
+        this.timer.start();
+      }
+    );
   };
 
-  render() {
-    if (this.state.phase === 'RESULTS') {
-      return (
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-around',
-            width: '100%',
-          }}
-        >
-          <div>
-            <h3>Ordered issues</h3>
-            <div>
-              {this.state.prioritizedIssues.map((issue) => (
-                <IssueCard key={issue.id} value={issue} compact />
-              ))}
-            </div>
-          </div>
-          <div>
-            <h3>Most debatable issues</h3>
-            <div>
-              {sortByDebatabilty(this.state.prioritizedIssues).map((issue) => (
-                <IssueCard key={issue.id} value={issue} compact />
-              ))}
-            </div>
-          </div>
-        </div>
-      );
-    }
+  renderResults() {
     return (
-      <div style={{ display: 'flex' }}>
-        {this.state.phase === 'REARRANGING' && (
-          <TimerWrapper>
-            <Timer
-              ref={(node) => {
-                this.timer = node;
-              }}
-              seconds={this.state.timerDuration}
-              autoStart
-              onFinished={() => this.setState({ phase: 'TIMER_ENDED' })}
-            />
-            <Button
-              appearance="primary"
-              onClick={() => {
-                this.timer.stop();
-                this.setState({ phase: 'TIMER_ENDED' });
-              }}
-            >
-              Finish now
-            </Button>
-          </TimerWrapper>
-        )}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-around',
+          width: '100%',
+        }}
+      >
         <div>
+          <h3>Ordered issues</h3>
           <div>
-            <AvatarGroup
-              appearance="stack"
-              size="large"
-              data={[
-                ...this.state.players.slice(this.state.activePlayer),
-                ...this.state.players.slice(0, this.state.activePlayer),
-              ].map(({ user }) => ({
-                key: user.key,
-                name: user.displayName,
-                src: user.avatarUrls && user.avatarUrls['32x32'],
-                appearance: 'circle',
-                size: 'medium',
-              }))}
-            />
-          </div>
-          <ReactSortable
-            list={this.state.players[this.state.activePlayer].pile}
-            setList={(l) => this.setPile(this.state.activePlayer, l)}
-            animation={200}
-            delayOnTouchStart={true}
-            delay={2}
-            style={{ backgroundColor: '#d3d3d3' }}
-            group="somegroup"
-            onEnd={this.nextPlayer}
-          >
-            {this.state.players[this.state.activePlayer].pile.map((issue) => (
-              <IssueCard key={issue.id} value={issue} compact />
+            {this.state.prioritizedIssues.map((issue) => (
+              <IssueCard
+                key={issue.id}
+                value={issue}
+                compact
+                className="no-select"
+              />
             ))}
-          </ReactSortable>
+          </div>
         </div>
+        <div>
+          <h3>Most debatable issues</h3>
+          <div>
+            {sortByDebatabilty(this.state.prioritizedIssues).map((issue) => (
+              <IssueCard
+                key={issue.id}
+                value={issue}
+                compact
+                className="no-select"
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  renderRearranging() {
+    return (
+      <div
+        style={{
+          display: 'flex',
+          width: '100%',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Players
+          players={this.state.players}
+          activePlayer={this.state.activePlayer}
+        />
         <ReactSortable
           list={this.state.prioritizedIssues}
           setList={(l) => this.setState({ prioritizedIssues: l })}
           animation={200}
           delayOnTouchStart={true}
           delay={2}
-          style={{ backgroundColor: '#d3d3d3', width: '500px' }}
-          group="somegroup"
+          style={{ backgroundColor: '#d3d3d3' }}
+          group={this.id}
+          id={this.targetSortableId}
           onEnd={(e) => {
             this.setState(({ prioritizedIssues, activePlayer, players }) => ({
               activePlayer: (activePlayer + 1) % players.length,
@@ -201,9 +194,128 @@ class MagicPrioritization extends React.Component {
           }}
         >
           {this.state.prioritizedIssues.map((issue) => (
-            <IssueCard key={issue.id} value={issue} compact />
+            <IssueCard
+              key={issue.id}
+              value={issue}
+              compact
+              className="draggable"
+            />
           ))}
         </ReactSortable>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <Timer
+            style={{ fontSize: '2rem' }}
+            ref={(node) => {
+              this.timer = node;
+            }}
+            seconds={this.state.timerDuration}
+            onFinished={() => this.setState({ phase: 'TIMER_ENDED' })}
+          />
+          <Button
+            appearance="primary"
+            onClick={() => {
+              this.timer.stop();
+              this.setState({ phase: 'TIMER_ENDED' });
+            }}
+          >
+            Finish now
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  renderFirst() {
+    return (
+      <div style={{ width: '100%' }}>
+        <div style={{ paddingBottom: '.3em' }}>
+          <Players
+            players={this.state.players}
+            activePlayer={this.state.activePlayer}
+          />
+        </div>
+        <div
+          style={{
+            display: 'flex',
+            width: '100%',
+            justifyContent: 'space-around',
+          }}
+        >
+          <div
+            style={{
+              flex: 1,
+              marginRight: '1em',
+            }}
+          >
+            <ReactSortable
+              list={this.state.players[this.state.activePlayer].pile}
+              setList={(l) => this.setPile(this.state.activePlayer, l)}
+              animation={200}
+              delayOnTouchStart={true}
+              delay={2}
+              style={{ backgroundColor: '#d3d3d3', flex: 1 }}
+              group={this.id}
+              id={this.sourceSortableId}
+              onEnd={(e) => {
+                if (e.to.id === this.sourceSortableId) {
+                  return;
+                }
+                this.nextPlayer();
+              }}
+            >
+              {this.state.players[this.state.activePlayer].pile.map((issue) => (
+                <IssueCard
+                  key={issue.id}
+                  value={issue}
+                  compact
+                  className="draggable"
+                />
+              ))}
+            </ReactSortable>
+          </div>
+          <ReactSortable
+            list={this.state.prioritizedIssues}
+            setList={(l) => this.setState({ prioritizedIssues: l })}
+            animation={200}
+            delayOnTouchStart={true}
+            delay={2}
+            style={{ backgroundColor: '#d3d3d3', marginLeft: '1em', flex: 1 }}
+            group={this.id}
+            id={this.targetSortableId}
+            sort={false}
+          >
+            {this.state.prioritizedIssues.map((issue) => (
+              <IssueCard
+                key={issue.id}
+                value={issue}
+                compact
+                className="draggable disabled"
+              />
+            ))}
+          </ReactSortable>
+        </div>
+      </div>
+    );
+  }
+
+  render() {
+    let renderedPhase;
+    if (this.state.phase === 'RESULTS') {
+      renderedPhase = this.renderResults();
+    } else if (this.state.phase === 'FIRST') {
+      renderedPhase = this.renderFirst();
+    } else {
+      renderedPhase = this.renderRearranging();
+    }
+    return (
+      <React.Fragment>
+        {renderedPhase}
         <ModalTransition>
           {this.state.phase === 'PENDING_START' && (
             <Modal
@@ -215,7 +327,7 @@ class MagicPrioritization extends React.Component {
               <br />
               You're team has {this.props.reArrangeDuration} minutes to
               re-arrange the issues. Then we will see if everyone is satisfied.
-              You have the oportunity to extend this re-arranging phase.
+              You have the opportunity to extend this re-arranging phase.
             </Modal>
           )}
         </ModalTransition>
@@ -231,17 +343,22 @@ class MagicPrioritization extends React.Component {
                     phase: 'RESULTS',
                   })
                 }
-                onExtendTimer={(seconds) =>
-                  this.setState({
-                    timerDuration: seconds,
-                    phase: 'REARRANGING',
-                  })
-                }
+                onExtendTimer={(seconds) => {
+                  this.setState(
+                    {
+                      timerDuration: seconds,
+                      phase: 'REARRANGING',
+                    },
+                    () => {
+                      this.timer.start();
+                    }
+                  );
+                }}
               />
             </Modal>
           )}
         </ModalTransition>
-      </div>
+      </React.Fragment>
     );
   }
 }
