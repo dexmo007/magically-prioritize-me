@@ -23,7 +23,9 @@
     "@atlaskit/css-reset": "^5.0.9",
     "@atlaskit/dynamic-table": "^13.6.1",
     "@atlaskit/form": "^7.0.1",
+    "@atlaskit/global-navigation": "^8.0.5",
     "@atlaskit/modal-dialog": "^10.5.0",
+    "@atlaskit/navigation-next": "^7.3.4",
     "@atlaskit/page": "^11.0.10",
     "@atlaskit/page-header": "^9.0.17",
     "@atlaskit/progress-bar": "^0.2.6",
@@ -45,6 +47,7 @@
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-markdown": "^4.3.1",
+    "react-router-dom": "^5.1.2",
     "react-scripts": "3.3.1",
     "react-sortablejs": "^2.0.11",
     "styled-components": "^3.0.0"
