@@ -44,6 +44,15 @@ function TimerEndedFooter({ onFinish, onExtendTimer }) {
   );
 }
 
+function getAvatarUrl(user) {
+  if (user.avatarUrl) {
+    return user.avatarUrl;
+  }
+  if (user.avatarUrls) {
+    return user.avatarUrls['32x32'];
+  }
+}
+
 function Players({ players, activePlayer }) {
   return (
     <div>
@@ -55,8 +64,8 @@ function Players({ players, activePlayer }) {
           ...players.slice(0, activePlayer),
         ].map(({ user }) => ({
           key: user.key,
-          name: user.displayName,
-          src: user.avatarUrls && user.avatarUrls['32x32'],
+          name: user.name,
+          src: getAvatarUrl(user),
           appearance: 'circle',
           size: 'medium',
         }))}
@@ -368,7 +377,7 @@ MagicPrioritization.propTypes = {
     PropTypes.shape({
       user: PropTypes.shape({
         key: PropTypes.string.isRequired,
-        displayName: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
         avatarUrls: PropTypes.object,
       }).isRequired,
       pile: PropTypes.arrayOf(PropTypes.object).isRequired,

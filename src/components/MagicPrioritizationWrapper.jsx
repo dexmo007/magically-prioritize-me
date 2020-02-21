@@ -6,14 +6,7 @@ import { getIssuesInSprint, getBoardConfig } from '../api';
 import arrayShuffle from '../util/array-shuffle';
 import arrayChunk from '../util/array-chunk';
 import MagicPrioritization from './MagicPrioritization';
-
-function keep(obj, keys) {
-  const newObj = {};
-  keys.forEach((key) => {
-    newObj[key] = obj[key];
-  });
-  return newObj;
-}
+import { keep } from '../util/json-transform';
 
 class MagicPrioritizationWrapper extends React.Component {
   static contextType = AppContext;
@@ -47,6 +40,14 @@ class MagicPrioritizationWrapper extends React.Component {
         const transformed = {
           ...keep(issue, ['id', 'key']),
           estimate,
+          type: issue.issuetype,
+          epic: !issue.epic
+            ? null
+            : {
+                key: issue.epic.key,
+                name: issue.epic.name,
+                color: issue.epic.color.key,
+              },
           ...keep(issue.fields, [
             'epic',
             'summary',
@@ -54,7 +55,6 @@ class MagicPrioritizationWrapper extends React.Component {
             'assignee',
             'labels',
             'components',
-            'issuetype',
             'reporter',
             'subtasks',
             'votes',

@@ -8,13 +8,17 @@ function CompactIssueCard({ ctx, value, className }) {
   return (
     <div className={classNames('IssueCard compact', className)}>
       <div className="header">
-        <a
-          href={`${ctx.data.serverUrl}/browse/${value.key}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {value.key}
-        </a>
+        {ctx.data.jiraBaseUrl ? (
+          <a
+            href={`${ctx.data.jiraBaseUrl}/browse/${value.key}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {value.key}
+          </a>
+        ) : (
+          <span>{value.key}</span>
+        )}
         {value.touched_count && (
           <span
             className="badge touched"
@@ -25,17 +29,21 @@ function CompactIssueCard({ ctx, value, className }) {
       <div className="title">{value.summary}</div>
       <div>
         {value.epic ? (
-          <a
-            href={`${ctx.data.serverUrl}/browse/${value.epic.key}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={classNames(
-              'epic',
-              value.epic.color.key.replace('color_', 'ghx-label-')
-            )}
-          >
-            {value.epic.name}
-          </a>
+          ctx.data.jiraBaseUrl ? (
+            <a
+              href={`${ctx.data.jiraBaseUrl}/browse/${value.epic.key}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={classNames(
+                'epic',
+                value.epic.color.replace('color_', 'ghx-label-')
+              )}
+            >
+              {value.epic.name || value.epic.key}
+            </a>
+          ) : (
+            <span>{value.epic.name || value.epic.key}</span>
+          )
         ) : (
           <span className="epic" style={{ visibility: 'hidden' }}>
             NONE
@@ -45,8 +53,8 @@ function CompactIssueCard({ ctx, value, className }) {
       <div className="footer">
         <img
           className="icon"
-          src={value.issuetype.iconUrl}
-          alt={value.issuetype.name}
+          src={value.type.iconUrl}
+          alt={value.type.name}
         ></img>
         <img
           className="icon"
@@ -75,8 +83,8 @@ function IssueCard({ value, compact, className }) {
       <div className="header">
         <img
           className="icon"
-          src={value.issuetype.iconUrl}
-          alt={value.issuetype.name}
+          src={value.type.iconUrl}
+          alt={value.type.name}
         ></img>
         <img
           className="icon"

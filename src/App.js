@@ -6,6 +6,7 @@ import GlobalNavigation from '@atlaskit/global-navigation';
 import JiraServerApp from './JiraServerApp';
 import { ReactComponent as Logo } from './assets/logo.svg';
 import Icon from '@atlaskit/icon';
+import FileApp from './setup/file/App';
 
 function LogoIcon(props) {
   return <Icon glyph={Logo} {...props} />;
@@ -41,7 +42,7 @@ function App() {
               <JiraServerApp />
             </Route>
             <Route path="/file">
-              <div>File </div>
+              <FileApp />
             </Route>
             <Route path="/">
               <Home />
