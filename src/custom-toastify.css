@@ -1,0 +1,16 @@
+.Toastify__toast {
+  font-family: inherit;
+}
+
+.Toastify__toast--error {
+  background: #ff5630;
+}
+.Toastify__toast--warning {
+  background: #ffab00;
+}
+.Toastify__toast--info {
+  background: #0052cc;
+}
+.Toastify__toast--success {
+  background: #36b37e;
+}

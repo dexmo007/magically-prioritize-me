@@ -2,6 +2,8 @@ import React, { useState, useRef } from 'react';
 import Button from '@atlaskit/button';
 import styled from 'styled-components';
 import { FlexCenterRow, FlexCenterCol } from './layout';
+import { toast } from 'react-toastify';
+import filesAccepted from '../util/file-accept';
 
 const Container = styled.div`
   width: 500px;
@@ -47,14 +49,7 @@ const Container = styled.div`
   `}
 `;
 
-function Dropzone({
-  onFileChosen,
-  multiple,
-  accept,
-  style,
-  className,
-  ...props
-}) {
+function Dropzone({ onChange, multiple, accept, ...props }) {
   const [dragOver, setDragOver] = useState(false);
   const inputRef = useRef();
   function preventAndStop(e) {
@@ -72,14 +67,16 @@ function Dropzone({
   async function onDrop(e) {
     onDragLeave(e);
     const files = e.dataTransfer.files;
-    // todo check multiple prop
-    if (files.length !== 1) {
-      console.error('You must only drop a single file');
-      return; // todo handle error
+    if (files.length !== 1 && !multiple) {
+      toast.error('You must only drop a single file!');
+      return;
     }
-    const file = files[0];
-    // todo check accept
-    onFileChosen(file);
+    if (accept && !filesAccepted(files)) {
+      return;
+    }
+    if (onChange) {
+      onChange(multiple ? files : files[0]);
+    }
   }
   return (
     <Container
@@ -88,16 +85,14 @@ function Dropzone({
       onDragEnter={onDragEnter}
       onDragOver={preventAndStop}
       onDragLeave={onDragLeave}
-      className={className}
-      style={{
-        ...style,
-      }}
       dragOver={dragOver}
     >
       <FlexCenterRow>
         <img
           src="https://aui-cdn.atlassian.com/media/files-icon.png"
           alt=""
+          height="114"
+          width="140"
         ></img>
         <FlexCenterCol>
           <div style={{ padding: '1em' }}>
@@ -118,7 +113,9 @@ function Dropzone({
         style={{ display: 'none' }}
         multiple={multiple}
         accept={accept}
-        onChange={console.log}
+        onChange={(e) =>
+          onChange && onChange(multiple ? e.target.files : e.target.files[0])
+        }
       ></input>
     </Container>
   );

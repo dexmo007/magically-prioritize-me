@@ -9,6 +9,8 @@ export default class ExcelIssueParser {
     );
   }
   async parse(file) {
+    throw new Error('NOT_IMPLEMENTED');
+    // eslint-disable-next-line
     const buffer = await readFileAsync(file, 'readAsArrayBuffer');
     const data = new Uint8Array(buffer);
     const workbook = XLSX.read(data, { type: 'array' });

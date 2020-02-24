@@ -6,7 +6,9 @@ import GlobalNavigation from '@atlaskit/global-navigation';
 import JiraServerApp from './JiraServerApp';
 import { ReactComponent as Logo } from './assets/logo.svg';
 import Icon from '@atlaskit/icon';
+import { ToastContainer } from 'react-toastify';
 import FileApp from './setup/file/App';
+import CrossIcon from '@atlaskit/icon/glyph/cross';
 
 function LogoIcon(props) {
   return <Icon glyph={Logo} {...props} />;
@@ -23,6 +25,11 @@ const Global = () => (
     helpItems={() => <div />}
   />
 );
+const CustomToastClose = ({ closeToast }) => (
+  <span onClick={closeToast}>
+    <CrossIcon size="small" />
+  </span>
+);
 function App() {
   return (
     <Router>
@@ -36,7 +43,7 @@ function App() {
         >
           <Switch>
             <Route path="/jira-cloud">
-              <div>JIRA Cloud</div>
+              <div>JIRA Cloud support coming soon!</div>
             </Route>
             <Route path="/jira-server">
               <JiraServerApp />
@@ -50,6 +57,7 @@ function App() {
           </Switch>
         </LayoutManager>
       </NavigationProvider>
+      <ToastContainer closeButton={<CustomToastClose />} />
     </Router>
   );
 }

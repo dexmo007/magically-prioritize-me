@@ -6,6 +6,8 @@ export default class CsvIssueParser {
   }
 
   async parse(file) {
+    throw new Error('NOT_IMPLEMENTED');
+    // eslint-disable-next-line
     return new Promise((resolve, reject) => {
       Papa.parse(file, {
         header: true,

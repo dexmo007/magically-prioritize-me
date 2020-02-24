@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import '@atlaskit/css-reset';
+import 'react-toastify/dist/ReactToastify.min.css';
+import './custom-toastify.css';
 import './index.css';
 import './ghx.css';
 import App from './App';

@@ -33,11 +33,29 @@ const SpotlightLink = styled(Link)`
     text-decoration: none;
     transform: translateY(-2px);
   }
+  position: relative;
+  &.coming-soon::before {
+    content: 'Coming soon!';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    font-size: 36px;
+    text-align: center;
+    background: #172b4d;
+    color: white;
+    padding: 0.2em;
+    border-radius: 1em 0 1em 0;
+  }
 `;
 
-function SpotlightCard({ children, image, title, to }) {
+function SpotlightCard({ children, image, title, to, comingSoon }) {
   return (
-    <SpotlightLink to={to}>
+    <SpotlightLink
+      to={to}
+      className={comingSoon ? 'coming-soon' : ''}
+      onClick={(e) => comingSoon && e.preventDefault()}
+    >
       <div
         style={{
           display: 'flex',
@@ -112,6 +130,7 @@ export default function Home() {
             }
             title="JIRA Cloud"
             to="/jira-cloud"
+            comingSoon
           >
             Issues can be imported from a JIRA Cloud site.
           </SpotlightCard>
