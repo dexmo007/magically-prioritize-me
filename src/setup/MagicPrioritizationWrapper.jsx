@@ -29,7 +29,12 @@ class MagicPrioritizationWrapper extends React.Component {
       }));
       localStorage.setItem(
         'magic-prio-game',
-        JSON.stringify({ path: this.props.path, players, reArrangeDuration })
+        JSON.stringify({
+          path: this.props.path,
+          players,
+          reArrangeDuration,
+          gameContext,
+        })
       );
       this.setState({ players, reArrangeDuration, gameContext });
     } catch (e) {
@@ -58,6 +63,7 @@ class MagicPrioritizationWrapper extends React.Component {
       this.setState({
         players: this.props.data.players,
         reArrangeDuration: this.props.data.reArrangeDuration,
+        gameContext: this.props.data.gameContext,
       });
     } else {
       await this.prepare();
