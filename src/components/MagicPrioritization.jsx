@@ -178,6 +178,9 @@ class MagicPrioritization extends React.Component {
           group={this.id}
           id={this.targetSortableId}
           onEnd={(e) => {
+            if (e.newIndex === e.oldIndex) {
+              return;
+            }
             this.setState(({ prioritizedIssues, activePlayer, players }) => ({
               activePlayer: (activePlayer + 1) % players.length,
               prioritizedIssues: [
