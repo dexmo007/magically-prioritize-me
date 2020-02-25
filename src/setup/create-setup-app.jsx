@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { ProgressTracker } from '@atlaskit/progress-tracker';
 import Page, { Grid, GridColumn } from '@atlaskit/page';
 import PageHeader from '@atlaskit/page-header';
@@ -11,17 +11,24 @@ const createSetupApp = (config) => () => {
     ctx: {},
     stages: initStages(config.stages),
   });
+  const [data, setData] = useState(null);
   const currentStage = useMemo(
     () => state.stages.find(({ status }) => status === 'current'),
     [state]
   );
   function advance(data) {
-    console.log(data);
     setState({
       ctx: { ...state.ctx, ...data },
       stages: advanceStages(state.stages),
     });
   }
+  useEffect(() => {
+    const persistent = localStorage.getItem('magic-prio-game');
+    if (persistent) {
+      const data = JSON.parse(persistent);
+      setData(data);
+    }
+  }, []);
   function renderSetup() {
     const { component: Step } = currentStage;
     return (
@@ -45,10 +52,10 @@ const createSetupApp = (config) => () => {
         <Grid>
           <PageHeader>Magic Prioritization</PageHeader>
         </Grid>
-        {currentStage ? (
+        {currentStage && !data ? (
           renderSetup()
         ) : (
-          <MagicPrioritizationWrapper {...config} />
+          <MagicPrioritizationWrapper {...config} data={data} />
         )}
       </Page>
       {config.additionSetupChildren}

@@ -139,12 +139,7 @@ class MagicPrioritization extends React.Component {
           <h3>Ordered issues</h3>
           <div>
             {this.state.prioritizedIssues.map((issue) => (
-              <IssueCard
-                key={issue.id}
-                value={issue}
-                compact
-                className="no-select"
-              />
+              <IssueCard key={issue.id} value={issue} className="no-select" />
             ))}
           </div>
         </div>
@@ -152,12 +147,7 @@ class MagicPrioritization extends React.Component {
           <h3>Most debatable issues</h3>
           <div>
             {sortByDebatabilty(this.state.prioritizedIssues).map((issue) => (
-              <IssueCard
-                key={issue.id}
-                value={issue}
-                compact
-                className="no-select"
-              />
+              <IssueCard key={issue.id} value={issue} className="no-select" />
             ))}
           </div>
         </div>
@@ -203,12 +193,7 @@ class MagicPrioritization extends React.Component {
           }}
         >
           {this.state.prioritizedIssues.map((issue) => (
-            <IssueCard
-              key={issue.id}
-              value={issue}
-              compact
-              className="draggable"
-            />
+            <IssueCard key={issue.id} value={issue} className="draggable" />
           ))}
         </ReactSortable>
         <div
@@ -279,12 +264,7 @@ class MagicPrioritization extends React.Component {
               }}
             >
               {this.state.players[this.state.activePlayer].pile.map((issue) => (
-                <IssueCard
-                  key={issue.id}
-                  value={issue}
-                  compact
-                  className="draggable"
-                />
+                <IssueCard key={issue.id} value={issue} className="draggable" />
               ))}
             </ReactSortable>
           </div>
@@ -303,7 +283,6 @@ class MagicPrioritization extends React.Component {
               <IssueCard
                 key={issue.id}
                 value={issue}
-                compact
                 className="draggable disabled"
               />
             ))}

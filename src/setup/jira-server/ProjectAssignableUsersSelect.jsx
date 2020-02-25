@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { findUsersAssignableToProject } from '../../api';
+import { findUsersAssignableToProject } from './api';
 import { Checkbox } from '@atlaskit/checkbox';
 import Avatar from '@atlaskit/avatar';
 import AppContext from '../../AppContext';
 import Spinner from '@atlaskit/spinner';
-import { Row } from '../layout';
+import { Row } from '../../components/layout';
 import styled from 'styled-components';
 
 const Container = styled.div`

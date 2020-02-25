@@ -7,7 +7,7 @@ import {
 } from '@atlaskit/quick-search';
 import AppContext from '../../AppContext';
 import debounce from 'lodash.debounce';
-import { searchUsers } from '../../api';
+import { searchUsers } from './api';
 
 class UserSearch extends React.Component {
   static contextType = AppContext;

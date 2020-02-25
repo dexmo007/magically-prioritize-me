@@ -50,7 +50,11 @@ interface Config {
   path: string;
   stages: SetupStage[];
   finalizeSetup: (ctx: SetupContext) => Promise<MagicPrioritizationContext>;
-  onFinalizeSetupError?: (e: Error) => boolean;
+  onFinalizeSetupError?: (
+    e: Error,
+    ctx: SetupContext,
+    update: Function
+  ) => boolean | Promise<boolean>;
   onUpdate?: (state: MagicPrioritizationState, ctx: SetupContext) => void;
   additionSetupChildren?: React.ReactNode;
 }

@@ -9,7 +9,7 @@ import Form, {
   ValidMessage,
 } from '@atlaskit/form';
 import { isUrl } from '../../util/validation';
-import { getServerInfo, connect } from '../../api';
+import { getServerInfo, connect } from './api';
 // import debounce from 'lodash.debounce';
 
 // const validateServerUrl = debounce(_validateServerUrl, 500);

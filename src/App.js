@@ -3,11 +3,11 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { LayoutManager, NavigationProvider } from '@atlaskit/navigation-next';
 import Home from './Home';
 import GlobalNavigation from '@atlaskit/global-navigation';
-import JiraServerApp from './JiraServerApp';
+import FileApp from './setup/file/App';
+import JiraServerApp from './setup/jira-server/App';
 import { ReactComponent as Logo } from './assets/logo.svg';
 import Icon from '@atlaskit/icon';
 import { ToastContainer } from 'react-toastify';
-import FileApp from './setup/file/App';
 import CrossIcon from '@atlaskit/icon/glyph/cross';
 
 function LogoIcon(props) {

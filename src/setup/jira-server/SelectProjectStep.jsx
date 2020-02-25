@@ -3,7 +3,7 @@ import { DynamicTableStateless } from '@atlaskit/dynamic-table';
 import Avatar from '@atlaskit/avatar';
 import TextField from '@atlaskit/textfield';
 import AppContext from '../../AppContext';
-import { getProjects } from '../../api';
+import { getProjects } from './api';
 import { Button } from '@atlaskit/button/dist/cjs/components/Button';
 
 function AvatarLink({ src, href, children }) {

@@ -7,7 +7,7 @@ import ModalDialog, {
   ModalTransition,
 } from '@atlaskit/modal-dialog';
 import AppContext from '../../AppContext';
-import { connect } from '../../api';
+import { connect } from './api';
 
 export default class ReLoginModal extends React.Component {
   static contextType = AppContext;
@@ -24,7 +24,7 @@ export default class ReLoginModal extends React.Component {
   };
 
   render() {
-    const { isOpen } = this.props;
+    const isOpen = this.context.data.session === 'EXPIRED';
     const footer = (props) => <ModalFooter showKeyline={props.showKeyline} />;
 
     return (

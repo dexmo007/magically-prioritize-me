@@ -1,10 +1,10 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import Form, { Field, FormFooter, HelperMessage } from '@atlaskit/form';
 import TextField from '@atlaskit/textfield';
 import Button from '@atlaskit/button';
 import Range from '@atlaskit/range';
 import ProjectAssignableUsersSelect from './ProjectAssignableUsersSelect';
-import { Row } from '../layout';
+import { Row } from '../../components/layout';
 import { Grid, GridColumn } from '@atlaskit/page';
 import UserSearch from './UserSearch';
 import Avatar from '@atlaskit/avatar';
@@ -126,9 +126,7 @@ export default function SetupTeamStep({ onFinish }) {
             }}
           >
             {({ fieldProps, error, valid }) => (
-              <Fragment>
-                <TeamMembersField {...fieldProps} />
-              </Fragment>
+              <TeamMembersField {...fieldProps} />
             )}
           </Field>
           <Field

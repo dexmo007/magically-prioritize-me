@@ -1,8 +1,9 @@
 import React from 'react';
 import { DynamicTableStateless } from '@atlaskit/dynamic-table';
 import AppContext from '../../AppContext';
-import { getSprints } from '../../api';
+import { getSprints } from './api';
 import { Button } from '@atlaskit/button/dist/cjs/components/Button';
+import { Checkbox } from '@atlaskit/checkbox';
 
 class SelectSprintStep extends React.Component {
   static contextType = AppContext;
@@ -35,7 +36,19 @@ class SelectSprintStep extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
+      <>
+        <Checkbox
+          label="Include closed sprints"
+          isChecked={this.state.includeClosed}
+          onChange={(e) =>
+            this.setState(
+              {
+                includeClosed: e.target.checked,
+              },
+              () => this.fetchSprints()
+            )
+          }
+        />
         <DynamicTableStateless
           head={{
             cells: [
@@ -77,9 +90,10 @@ class SelectSprintStep extends React.Component {
                   key: sprint.id + '-goal',
                   content: (
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
-                      {sprint.goal.split('\n').map((line, i) => (
-                        <span key={i}>{line}</span>
-                      ))}
+                      {sprint.goal &&
+                        sprint.goal
+                          .split('\n')
+                          .map((line, i) => <span key={i}>{line}</span>)}
                     </div>
                   ),
                 },
@@ -111,7 +125,7 @@ class SelectSprintStep extends React.Component {
           }
           isLoading={!this.state.sprints}
         />
-      </React.Fragment>
+      </>
     );
   }
 }

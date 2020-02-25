@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { ReactComponent as CloudIcon } from './assets/admin-cloud-tab-icon.svg';
 import { ReactComponent as ServerIcon } from './assets/admin-server-tab-icon.svg';
 import { ReactComponent as FileIcon } from './assets/file.svg';
@@ -80,6 +80,14 @@ function SpotlightCard({ children, image, title, to, comingSoon }) {
   );
 }
 export default function Home() {
+  const history = useHistory();
+  useEffect(() => {
+    const persistent = localStorage.getItem('magic-prio-game');
+    if (persistent) {
+      const { path } = JSON.parse(persistent);
+      history.push(path);
+    }
+  }, [history]);
   return (
     <Wrapper>
       <header
