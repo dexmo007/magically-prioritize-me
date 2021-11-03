@@ -77,6 +77,32 @@ export default class XmlIssueParser {
         htmlDecode(val, { isAttributeValue: true }), //default is a=>a
       tagValueProcessor: (val, tagName) => htmlDecode(val), //default is a=>a
     }); // todo options, validation, transformation
+    const result = findEstimateField(data.rss.channel.item);
+
+    if (result.state !== 'CONFIDENT') {
+      throw new Error('Estimation field not found!', result);
+    }
+    const estimateFieldId = result.result.id;
+    console.log('Estimation field finder', estimateFieldId, result);
+    function getCustomFieldValue(issue, customFieldId, identifierAttr) {
+
+      const cf = issue.customfields.customfield.find(
+        (f) => f[identifierAttr || '@_id'] === customFieldId
+      );
+      if (!cf) {
+        return null;
+      }
+      return cf.customfieldvalues.customfieldvalue;
+    }
+    const epics = data.rss.channel.item
+    .filter(issue => issue.type['#text'] === 'Epic')
+    .map(issue => ({
+      id: issue.key['@_id'],
+      key: issue.key['#text'],
+      link: issue.link,
+      name: getCustomFieldValue(issue, 'com.pyxis.greenhopper.jira:gh-epic-label', '@_key'),
+      color: getCustomFieldValue(issue, 'com.pyxis.greenhopper.jira:gh-epic-color', '@_key')
+    }));
     function getEpic(issue) {
       const fields = issue.customfields.customfield;
       const epicLink = fields.find(
@@ -85,26 +111,14 @@ export default class XmlIssueParser {
       if (!epicLink) {
         return;
       }
-      return { key: epicLink.customfieldvalues.customfieldvalue };
+      const key= epicLink.customfieldvalues.customfieldvalue;
+      const epic = epics.find(e => e.key === key);
+      return epic || {key};
     }
-    const result = findEstimateField(data.rss.channel.item);
-
-    if (result.state !== 'CONFIDENT') {
-      throw new Error('Estimation field not found!', result);
-    }
-    const estimateFieldId = result.result.id;
-    console.log('Estimation field finder', estimateFieldId, result);
-    function getCustomFieldValue(issue, customFieldId) {
-      const cf = issue.customfields.customfield.find(
-        (f) => f['@_id'] === customFieldId
-      );
-      if (!cf) {
-        return null;
-      }
-      return cf.customfieldvalues.customfieldvalue;
-    }
-    return data.rss.channel.item.map((issue) => ({
-      // ...issue,
+  console.log('Issues!!!', data.rss.channel.item);
+    return data.rss.channel.item
+    .filter(issue => issue.type['#text'] !== 'Epic')
+    .map((issue) => ({
       ...keep(issue, ['link', 'description', 'summary']),
       id: issue.key['@_id'],
       key: issue.key['#text'],
