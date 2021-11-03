@@ -8,9 +8,9 @@ function IssueCard({ value, className }) {
   return (
     <div className={classNames('IssueCard compact', className)}>
       <div className="header">
-        {ctx.jiraBaseUrl ? (
+        {(ctx.jiraBaseUrl || value.link) ? (
           <a
-            href={`${ctx.jiraBaseUrl}/browse/${value.key}`}
+            href={value.link || `${ctx.jiraBaseUrl}/browse/${value.key}`}
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -31,7 +31,7 @@ function IssueCard({ value, className }) {
         {value.epic ? (
           (ctx.jiraBaseUrl || value.epic.link) ? (
             <a
-              href={value.epic.link | `${ctx.jiraBaseUrl}/browse/${value.epic.key}`}
+              href={value.epic.link || `${ctx.jiraBaseUrl}/browse/${value.epic.key}`}
               target="_blank"
               rel="noopener noreferrer"
               className={classNames(
