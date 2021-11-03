@@ -1,4 +1,4 @@
 [build]
   publish = "build/"
-  command = "npm --cwd functions install && npm run build"
+  command = "npm --prefix functions install && npm run build"
   functions = "functions/"
