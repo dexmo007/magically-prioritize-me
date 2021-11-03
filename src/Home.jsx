@@ -8,8 +8,8 @@ import EmojiSymbolsIcon from '@atlaskit/icon/glyph/emoji/symbols';
 import { ReactComponent as Logo } from './assets/logo.svg';
 
 const Wrapper = styled.div`
-  width: calc(100%+24px);
-  height: 100%;
+  width: calc(100% + 24px);
+  min-height: 100vh;
   padding: 16px;
   margin-left: -24px;
   display: flex;
