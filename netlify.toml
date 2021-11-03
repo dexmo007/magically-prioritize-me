@@ -1,4 +1,4 @@
 [build]
   publish = "build/"
-  command = "npm --prefix functions install && npm run build"
+  command = "npm --prefix functions install && npm install && npm run build"
   functions = "functions/"
