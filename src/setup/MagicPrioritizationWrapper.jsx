@@ -20,7 +20,7 @@ class MagicPrioritizationWrapper extends React.Component {
 
   prepare = async () => {
     try {
-      const gameContext = await this.props.finalizeSetup(this.context.data);
+      const gameContext = this.props.finalizeSetup ? await this.props.finalizeSetup(this.context.data) : this.context.data;
       let { issues, teamMembers, reArrangeDuration } = gameContext;
       issues = arrayShuffle(issues);
       const players = arrayChunk(issues, teamMembers.length).map((pile, i) => ({
