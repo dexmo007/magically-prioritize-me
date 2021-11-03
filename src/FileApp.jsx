@@ -86,16 +86,8 @@ class XmlIssueParser {
         htmlDecode(val, { isAttributeValue: true }), //default is a=>a
       tagValueProcessor: (val, tagName) => htmlDecode(val), //default is a=>a
     }); // todo options, validation, transformation
-    function getEpic(issue) {
-      const fields = issue.customfields.customfield;
-      const epicLink = fields.find(
-        (f) => f['@_key'] === 'com.pyxis.greenhopper.jira:gh-epic-link'
-      );
-      if (!epicLink) {
-        return;
-      }
-      return { key: epicLink.customfieldvalues.customfieldvalue };
-    }
+    
+
     const result = findEstimateField(data.rss.channel.item);
 
     if (result.state !== 'CONFIDENT') {
@@ -112,7 +104,40 @@ class XmlIssueParser {
       }
       return cf.customfieldvalues.customfieldvalue;
     }
-    return data.rss.channel.item.map((issue) => ({
+    function getCustomFieldValueByKey(issue, customFieldKey) {
+      const cf = issue.customfields.customfield.find(
+        (f) => f['@_key'] === customFieldKey
+      );
+      if (!cf) {
+        return null;
+      }
+      return cf.customfieldvalues.customfieldvalue;
+    }
+    const epics = data.rss.channel.item
+      .filter(issue => issue.type['#text'] === 'Epic')
+      .map(issue => ({
+        id: issue.key['@_id'],
+        key: issue.key['#text'],
+        link: issue.link,
+        name: getCustomFieldValue(issue, 'com.pyxis.greenhopper.jira:gh-epic-label'),
+        color: getCustomFieldValueByKey(issue, 'com.pyxis.greenhopper.jira:gh-epic-color')
+      }));
+      function getEpic(issue) {
+        const fields = issue.customfields.customfield;
+        const epicLink = fields.find(
+          (f) => f['@_key'] === 'com.pyxis.greenhopper.jira:gh-epic-link'
+        );
+        if (!epicLink) {
+          return;
+        }
+        const key= epicLink.customfieldvalues.customfieldvalue;
+        const epic = epics.find(e => e.key === key);
+        return epic | {key};
+      }
+    console.log('Issues!!!', data.rss.channel.item);
+    return data.rss.channel.item
+      .filter(issue => issue.type['#text'] !== 'Epic')
+      .map((issue) => ({
       // ...issue,
       ...keep(issue, ['link', 'description', 'summary']),
       id: issue.key['@_id'],

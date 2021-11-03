@@ -29,9 +29,9 @@ function IssueCard({ value, className }) {
       <div className="title">{value.summary}</div>
       <div>
         {value.epic ? (
-          ctx.jiraBaseUrl ? (
+          (ctx.jiraBaseUrl || value.epic.link) ? (
             <a
-              href={`${ctx.jiraBaseUrl}/browse/${value.epic.key}`}
+              href={value.epic.link | `${ctx.jiraBaseUrl}/browse/${value.epic.key}`}
               target="_blank"
               rel="noopener noreferrer"
               className={classNames(
