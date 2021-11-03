@@ -44,9 +44,9 @@ function SetupTeamStep({ onFinish }) {
       {
         key: String(Math.random()),
         name,
-        avatarUrl: `https://api.adorable.io/avatars/80/${encodeURIComponent(
+        avatarUrl: `https://avatars.dicebear.com/api/initials/${encodeURIComponent(
           name
-        )}.png`,
+        )}.svg`,
       },
     ]);
     inputRef.current.value = '';
