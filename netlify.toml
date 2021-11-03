@@ -1,4 +1,4 @@
 [build]
   publish = "build/"
-  command = "yarn --cwd functions install && yarn build"
+  command = "npm --cwd functions install && npm run build"
   functions = "functions/"
