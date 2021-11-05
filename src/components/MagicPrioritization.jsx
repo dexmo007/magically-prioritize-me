@@ -5,7 +5,7 @@ import IssueCard from './IssueCard';
 import Modal, { ModalTransition } from '@atlaskit/modal-dialog';
 import Timer from './Timer';
 import styled from 'styled-components';
-import { Button } from '@atlaskit/button/dist/cjs/components/Button';
+import Button from '@atlaskit/button';
 import TimeRange from './TimeRange';
 import { sortByDebatabilty } from '../util/issue-sort';
 import AvatarGroup from '@atlaskit/avatar-group';

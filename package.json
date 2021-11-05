@@ -16,9 +16,9 @@
     "url": "https://github.com/dexmo007/magically-prioritize-me/issues"
   },
   "dependencies": {
-    "@atlaskit/avatar": "^17.1.5",
-    "@atlaskit/avatar-group": "^5.0.2",
-    "@atlaskit/button": "^13.3.5",
+    "@atlaskit/avatar": "^20.5.1",
+    "@atlaskit/avatar-group": "^8.5.4",
+    "@atlaskit/button": "^16.1.3",
     "@atlaskit/checkbox": "^10.1.5",
     "@atlaskit/css-reset": "^5.0.9",
     "@atlaskit/dynamic-table": "^13.6.1",
@@ -38,9 +38,9 @@
     "@atlaskit/tag-group": "^9.0.5",
     "@atlaskit/textfield": "^3.1.4",
     "@atlaskit/theme": "^9.5.0",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
+    "@testing-library/jest-dom": "^5.15.0",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.5.0",
     "classnames": "^2.3.1",
     "fast-xml-parser": "^3.21.1",
     "he": "^1.2.0",
@@ -80,7 +80,7 @@
     ]
   },
   "devDependencies": {
-    "@types/jest": "^25.1.2",
+    "@types/jest": "^27.0.2",
     "npm-check-updates": "^12.0.0"
   }
 }

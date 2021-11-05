@@ -4,7 +4,7 @@ import debounce from 'lodash.debounce';
 import { DynamicTableStateless } from '@atlaskit/dynamic-table';
 import { searchBoards } from './api';
 import AppContext from '../../AppContext';
-import { Button } from '@atlaskit/button/dist/cjs/components/Button';
+import Button from '@atlaskit/button';
 
 function SelectBoardStep({ onFinish }) {
   const context = useContext(AppContext);

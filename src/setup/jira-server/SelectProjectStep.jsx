@@ -4,7 +4,7 @@ import Avatar from '@atlaskit/avatar';
 import TextField from '@atlaskit/textfield';
 import AppContext from '../../AppContext';
 import { getProjects } from './api';
-import { Button } from '@atlaskit/button/dist/cjs/components/Button';
+import Button from '@atlaskit/button';
 
 function AvatarLink({ src, href, children }) {
   return (

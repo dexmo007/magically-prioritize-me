@@ -5,7 +5,7 @@ import AppContext from '../AppContext';
 import arrayShuffle from '../util/array-shuffle';
 import arrayChunk from '../util/array-chunk';
 import MagicPrioritization from '../components/MagicPrioritization';
-import { Button } from '@atlaskit/button/dist/cjs/components/Button';
+import Button from '@atlaskit/button';
 import { useNavigate } from 'react-router-dom';
 import GameContext from './GameContext';
 

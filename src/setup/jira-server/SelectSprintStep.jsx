@@ -2,7 +2,7 @@ import React from 'react';
 import { DynamicTableStateless } from '@atlaskit/dynamic-table';
 import AppContext from '../../AppContext';
 import { getSprints } from './api';
-import { Button } from '@atlaskit/button/dist/cjs/components/Button';
+import Button from '@atlaskit/button';
 import { Checkbox } from '@atlaskit/checkbox';
 
 class SelectSprintStep extends React.Component {

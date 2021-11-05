@@ -106,7 +106,8 @@ function RoutingOutlet() {
         <Routes>
           <Route path="/jira-cloud" element={<Wrap color="blue">
               <div>JIRA Cloud support coming soon!</div>
-            </Wrap>}/>
+            </Wrap>}/
+>
           <Route path="/jira-server" element={<JiraServerApp />} />
           <Route path="/file" element={<FileApp />}/>
           <Route path="/" element={<Home />} />
