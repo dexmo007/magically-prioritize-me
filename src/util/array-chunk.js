@@ -1,4 +1,4 @@
-export default function(arr, n) {
+export default function arrayChunk(arr, n) {
   if (arr.length < n) {
     return arr.map((e) => [e]);
   }

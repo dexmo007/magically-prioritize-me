@@ -1,10 +1,9 @@
 import React, { Suspense, lazy } from 'react';
 import {
   BrowserRouter as Router,
-  Switch,
+  Routes,
   Route,
   useLocation,
-  Link,
 } from 'react-router-dom';
 import { LayoutManager, NavigationProvider } from '@atlaskit/navigation-next';
 import Home from './Home';
@@ -18,7 +17,6 @@ import styled from 'styled-components';
 import {
   TransitionGroup,
   CSSTransition,
-  SwitchTransition,
 } from 'react-transition-group';
 
 function LogoIcon(props) {
@@ -105,29 +103,17 @@ function RoutingOutlet() {
         classNames="fade"
       >
         <Suspense fallback={<RouteLoading />}>
-        <Switch location={location}>
-          <Route path="/jira-cloud">
-            <Wrap color="blue">
+        <Routes>
+          <Route path="/jira-cloud" element={<Wrap color="blue">
               <div>JIRA Cloud support coming soon!</div>
-            </Wrap>
+            </Wrap>}/>
+          <Route path="/jira-server" element={<JiraServerApp />} />
+          <Route path="/file" element={<FileApp />}/>
+          <Route path="/" element={<Home />} />
+          <Route path="*">
+            This is not the page you are looking for.
           </Route>
-          <Route path="/jira-server">
-            {/* <Wrap color="red">
-              <div>JIRA Server rocks!</div>
-            </Wrap> */}
-            <JiraServerApp />
-          </Route>
-          <Route path="/file">
-            <FileApp />
-            {/* <Wrap color="white">
-              <div>File uploads are cool</div>
-              <Link to="/">Go home</Link>
-            </Wrap> */}
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
+        </Routes>
         </Suspense>
       </CSSTransition>
     </TransitionGroup>

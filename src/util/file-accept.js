@@ -1,4 +1,4 @@
-export default function(accept, files) {
+export default function fileAccept(accept, files) {
   if (!accept) {
     return true;
   }

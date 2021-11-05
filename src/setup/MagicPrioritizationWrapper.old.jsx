@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React from 'react';
 import { Grid, GridColumn } from '@atlaskit/page';
 import ProgressBar from '@atlaskit/progress-bar';
 import AppContext from '../AppContext';
@@ -6,18 +6,21 @@ import arrayShuffle from '../util/array-shuffle';
 import arrayChunk from '../util/array-chunk';
 import MagicPrioritization from '../components/MagicPrioritization';
 import { Button } from '@atlaskit/button/dist/cjs/components/Button';
-import { useNavigate } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import GameContext from './GameContext';
 
+class MagicPrioritizationWrapper extends React.Component {
+  static contextType = AppContext;
 
+  state = {
+    players: null,
+    reArrangeDuration: null,
+    gameContext: null,
+  };
 
-export default function MagicPrioritizationWrapper({finalizeSetup, path, onFinalizeSetupError, onUpdate, data}) {
-  const context = useContext(AppContext);
-  const navigate = useNavigate();
-  const [state, setState] = useState({});
-  const prepare = useCallback(async () => {
+  prepare = async () => {
     try {
-      const gameContext = finalizeSetup ? await finalizeSetup(context.data) : context.data;
+      const gameContext = this.props.finalizeSetup ? await this.props.finalizeSetup(this.context.data) : this.context.data;
       let { issues, teamMembers, reArrangeDuration } = gameContext;
       issues = arrayShuffle(issues);
       const players = arrayChunk(issues, teamMembers.length).map((pile, i) => ({
@@ -27,64 +30,67 @@ export default function MagicPrioritizationWrapper({finalizeSetup, path, onFinal
       localStorage.setItem(
         'magic-prio-game',
         JSON.stringify({
-          path,
+          path: this.props.path,
           players,
           reArrangeDuration,
           gameContext,
         })
       );
-      setState({ players, reArrangeDuration, gameContext });
-      } catch (e) {
-        if (onFinalizeSetupError) {
-        const handled = await onFinalizeSetupError(
+      this.setState({ players, reArrangeDuration, gameContext });
+    } catch (e) {
+      if (this.props.onFinalizeSetupError) {
+        const handled = await this.props.onFinalizeSetupError(
           e,
-          context.data,
-          context.update
+          this.context.data,
+          this.context.update
         );
         if (handled) {
           return;
         }
       }
+      throw e;
+    }
+  };
 
-        throw e;
-        }
-  }, [finalizeSetup,context, onFinalizeSetupError,path]);
+  async componentDidUpdate() {
+    if (this.props.onUpdate) {
+      this.props.onUpdate();
+    }
+  }
 
-    useEffect(() => {
-      onUpdate && onUpdate();
-    }, [onUpdate, state, context]);
-    useEffect(() => {
-      if (data) {
-        setState({
-          players: data.players,
-          reArrangeDuration: data.reArrangeDuration,
-          gameContext: data.gameContext,
-        });
-      } else {
-        prepare();
-      }
-    }, [data, prepare]);
+  async componentDidMount() {
+    if (this.props.data) {
+      this.setState({
+        players: this.props.data.players,
+        reArrangeDuration: this.props.data.reArrangeDuration,
+        gameContext: this.props.data.gameContext,
+      });
+    } else {
+      await this.prepare();
+    }
+  }
 
+  render() {
     return (
       <Grid>
-        {!state.players ? (
+        {!this.state.players ? (
           <GridColumn>
             <ProgressBar isIndeterminate />
             <span>Fetching issues...</span>
           </GridColumn>
         ) : (
           <>
-            <GameContext.Provider value={state.gameContext}>
+            <GameContext.Provider value={this.state.gameContext}>
               <MagicPrioritization
-                players={state.players}
-                reArrangeDuration={state.reArrangeDuration}
+                players={this.state.players}
+                reArrangeDuration={this.state.reArrangeDuration}
               />
             </GameContext.Provider>
             <div style={{ marginBottom: '1em', padding: '1em 0' }}>
               <Button
                 onClick={() => {
                   localStorage.clear();
-                  navigate('/');
+                  this.props.history.push('/');
                 }}
               >
                 Clear game and go to home
@@ -95,3 +101,6 @@ export default function MagicPrioritizationWrapper({finalizeSetup, path, onFinal
       </Grid>
     );
   }
+}
+
+export default withRouter(MagicPrioritizationWrapper);
