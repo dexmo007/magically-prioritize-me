@@ -72,7 +72,7 @@ function ConnectStep({ onFinish }) {
                 )}
                 {error === 'INVALID_JIRA_VERSION' && (
                   <ErrorMessage>
-                    Invalid JIRA version, >= 8 is required.
+                    Invalid JIRA version, {'>'}= 8 is required.
                   </ErrorMessage>
                 )}
               </Fragment>

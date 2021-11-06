@@ -84,7 +84,6 @@ export default class XmlIssueParser {
     }
     const estimateFieldId = result.result.id;
     function getCustomFieldValue(issue, customFieldId, identifierAttr) {
-
       const cf = issue.customfields.customfield.find(
         (f) => f[identifierAttr || '@_id'] === customFieldId
       );
@@ -94,14 +93,22 @@ export default class XmlIssueParser {
       return cf.customfieldvalues.customfieldvalue;
     }
     const epics = data.rss.channel.item
-    .filter(issue => issue.type['#text'] === 'Epic')
-    .map(issue => ({
-      id: issue.key['@_id'],
-      key: issue.key['#text'],
-      link: issue.link,
-      name: getCustomFieldValue(issue, 'com.pyxis.greenhopper.jira:gh-epic-label', '@_key'),
-      color: getCustomFieldValue(issue, 'com.pyxis.greenhopper.jira:gh-epic-color', '@_key')
-    }));
+      .filter((issue) => issue.type['#text'] === 'Epic')
+      .map((issue) => ({
+        id: issue.key['@_id'],
+        key: issue.key['#text'],
+        link: issue.link,
+        name: getCustomFieldValue(
+          issue,
+          'com.pyxis.greenhopper.jira:gh-epic-label',
+          '@_key'
+        ),
+        color: getCustomFieldValue(
+          issue,
+          'com.pyxis.greenhopper.jira:gh-epic-color',
+          '@_key'
+        ),
+      }));
     function getEpic(issue) {
       const fields = issue.customfields.customfield;
       const epicLink = fields.find(
@@ -110,29 +117,29 @@ export default class XmlIssueParser {
       if (!epicLink) {
         return;
       }
-      const key= epicLink.customfieldvalues.customfieldvalue;
-      const epic = epics.find(e => e.key === key);
-      return epic || {key};
+      const key = epicLink.customfieldvalues.customfieldvalue;
+      const epic = epics.find((e) => e.key === key);
+      return epic || { key };
     }
-  console.log('Issues!!!', data.rss.channel.item);
+    console.log('Issues!!!', data.rss.channel.item);
     return data.rss.channel.item
-    .filter(issue => issue.type['#text'] !== 'Epic')
-    .map((issue) => ({
-      ...keep(issue, ['link', 'description', 'summary']),
-      id: issue.key['@_id'],
-      key: issue.key['#text'],
-      type: {
-        id: issue.type['@_id'],
-        name: issue.type['#text'],
-        iconUrl: issue.type['@_iconUrl'],
-      },
-      priority: {
-        id: issue.priority['@_id'],
-        name: issue.priority['#text'],
-        iconUrl: issue.priority['@_iconUrl'],
-      },
-      epic: getEpic(issue),
-      estimate: getCustomFieldValue(issue, estimateFieldId),
-    }));
+      .filter((issue) => issue.type['#text'] !== 'Epic')
+      .map((issue) => ({
+        ...keep(issue, ['link', 'description', 'summary']),
+        id: issue.key['@_id'],
+        key: issue.key['#text'],
+        type: {
+          id: issue.type['@_id'],
+          name: issue.type['#text'],
+          iconUrl: issue.type['@_iconUrl'],
+        },
+        priority: {
+          id: issue.priority['@_id'],
+          name: issue.priority['#text'],
+          iconUrl: issue.priority['@_iconUrl'],
+        },
+        epic: getEpic(issue),
+        estimate: getCustomFieldValue(issue, estimateFieldId),
+      }));
   }
 }

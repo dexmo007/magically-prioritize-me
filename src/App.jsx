@@ -14,10 +14,7 @@ import { ToastContainer } from 'react-toastify';
 import CrossIcon from '@atlaskit/icon/glyph/cross';
 import Spinner from '@atlaskit/spinner';
 import styled from 'styled-components';
-import {
-  TransitionGroup,
-  CSSTransition,
-} from 'react-transition-group';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 function LogoIcon(props) {
   return <Icon glyph={Logo} {...props} />;
@@ -40,7 +37,7 @@ const CustomToastClose = ({ closeToast }) => (
   </span>
 );
 const JiraServerApp = lazy(() => import('./setup/jira-server/App'));
-const FileApp = lazy(  () =>        import('./setup/file/App'));
+const FileApp = lazy(() => import('./setup/file/App'));
 function RouteLoading() {
   return (
     <div
@@ -103,18 +100,20 @@ function RoutingOutlet() {
         classNames="fade"
       >
         <Suspense fallback={<RouteLoading />}>
-        <Routes>
-          <Route path="/jira-cloud" element={<Wrap color="blue">
-              <div>JIRA Cloud support coming soon!</div>
-            </Wrap>}/
->
-          <Route path="/jira-server" element={<JiraServerApp />} />
-          <Route path="/file" element={<FileApp />}/>
-          <Route path="/" element={<Home />} />
-          <Route path="*">
-            This is not the page you are looking for.
-          </Route>
-        </Routes>
+          <Routes>
+            <Route
+              path="/jira-cloud"
+              element={
+                <Wrap color="blue">
+                  <div>JIRA Cloud support coming soon!</div>
+                </Wrap>
+              }
+            />
+            <Route path="/jira-server" element={<JiraServerApp />} />
+            <Route path="/file" element={<FileApp />} />
+            <Route path="/" element={<Home />} />
+            <Route path="*">This is not the page you are looking for.</Route>
+          </Routes>
         </Suspense>
       </CSSTransition>
     </TransitionGroup>
