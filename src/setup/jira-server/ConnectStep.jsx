@@ -19,11 +19,6 @@ function ConnectStep({ onFinish }) {
   async function validateServerUrl(serverUrl, formState, fieldState) {
     if (!serverUrl || (serverInfo && serverUrl === serverInfo.serverUrl))
       return;
-    // console.log(
-    //   serverUrl,
-    //   JSON.stringify(formState),
-    //   JSON.stringify(fieldState)
-    // );
     if (!isUrl(serverUrl)) return 'INVALID_URL';
     try {
       await fetch(serverUrl, { method: 'HEAD', mode: 'no-cors' });
@@ -36,7 +31,6 @@ function ConnectStep({ onFinish }) {
         return 'INVALID_JIRA_VERSION';
       }
       setServerInfo({ ...info, serverUrl });
-      console.log(info);
       return;
     } catch {
       return 'INVALID_URL';

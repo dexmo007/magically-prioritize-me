@@ -83,7 +83,6 @@ export default class XmlIssueParser {
       throw new Error('Estimation field not found!', result);
     }
     const estimateFieldId = result.result.id;
-    console.log('Estimation field finder', estimateFieldId, result);
     function getCustomFieldValue(issue, customFieldId, identifierAttr) {
 
       const cf = issue.customfields.customfield.find(
