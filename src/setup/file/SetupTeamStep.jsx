@@ -70,7 +70,9 @@ function SetupTeamStep({ onFinish }) {
         <Button appearance="primary" onClick={add}>
           Add
         </Button>
-        <Button appearance="primary" onClick={() => onFinish({ teamMembers })}>
+        <Button appearance="primary"
+        isDisabled={teamMembers.length === 0}
+        onClick={() => onFinish({ teamMembers })}>
           Finish
         </Button>
       </FlexCenterRow>
